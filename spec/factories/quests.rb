@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :quest do
-    sequence(:name) { |n| "Quest #{n}" }
+    name { "Test Quest" }
     status { false }
 
     trait :active do

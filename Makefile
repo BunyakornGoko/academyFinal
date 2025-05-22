@@ -6,6 +6,12 @@ test:
 e2e:
 	bundle exec rspec spec/features/quest_management_spec.rb
 
+db-up:
+	docker compose up -d
+
+db-down:
+	docker compose down
+
 help:
 	@echo "Available targets:"
 	@echo "  all         - Default target, runs test"
