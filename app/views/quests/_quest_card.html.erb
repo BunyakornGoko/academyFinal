@@ -1,30 +1,45 @@
 <%= turbo_frame_tag quest do %>
-  <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-200" data-testid="quest-card-<%= quest.id %>">
+  <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1" data-testid="quest-card-<%= quest.id %>">
     <div class="p-6">
-      <div class="flex flex-col xs:flex-row justify-between items-start gap-2 mb-4">
-        <div class="flex items-center gap-3">
-          <%= form_with(model: quest, url: toggle_status_quest_path(quest), method: :post, class: "flex items-center") do |f| %>
-            <%= check_box_tag :status, '1', quest.status,
-              data: {
-                action: "change->form#submit",
-                controller: "form"
-              },
-              class: "h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer"
-            %>
-          <% end %>
-          <h2 class="text-xl font-semibold text-gray-800 <%= quest.status? ? 'line-through text-gray-500' : '' %>" data-testid="quest-card-name">
-            <%= quest.name %>
-          </h2>
+      <div class="flex flex-col space-y-4">
+        <div class="flex xs:flex-row justify-between items-start gap-3">
+          <div class="flex items-center gap-3 flex-1">
+            <%= form_with(model: quest, url: toggle_status_quest_path(quest), method: :post, class: "flex items-center") do |f| %>
+              <%= check_box_tag :status, '1', quest.status,
+                data: {
+                  action: "change->form#submit",
+                  controller: "form"
+                },
+                class: "h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer transition-colors duration-200"
+              %>
+            <% end %>
+            <h2 class="text-xl font-semibold text-gray-800 <%= quest.status? ? 'line-through text-gray-500' : '' %> transition-all duration-200" data-testid="quest-card-name">
+              <%= quest.name %>
+            </h2>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <span class="px-3 py-1.5 rounded-full text-sm font-medium <%= quest.status? ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %> transition-colors duration-200" data-testid="quest-card-status">
+              <%= quest.status? ? "Completed" : "In Progress" %>
+            </span>
+            <%= button_to quest, method: :delete, 
+                class: "text-gray-400 hover:text-red-600 transition-colors duration-200", 
+                data: { 
+                  turbo_confirm: "Are you sure you want to delete this quest?", 
+                  testid: "quest-delete-button-#{quest.id}" 
+                } do %>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            <% end %>
+          </div>
         </div>
-        <div class="flex items-center gap-3">
-          <span class="px-2 py-1 rounded-full text-xs <%= quest.status? ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>" data-testid="quest-card-status">
-            <%= quest.status? ? "Completed" : "In Progress" %>
-          </span>
-          <%= button_to quest, method: :delete, class: "text-red-500 hover:text-red-700", data: { turbo_confirm: "Are you sure?", testid: "quest-delete-button-#{quest.id}" } do %>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          <% end %>
+        
+        <div class="text-sm text-gray-500 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Updated <%= time_ago_in_words(quest.updated_at) %> ago
         </div>
       </div>
     </div>
