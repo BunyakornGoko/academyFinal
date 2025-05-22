@@ -105,4 +105,30 @@ RSpec.describe "/quests", type: :request do
       expect(response).to have_http_status(:see_other)
     end
   end
+
+  describe "POST /quests/:id/toggle_status" do
+    let(:quest) { Quest.create!(valid_attributes) }
+
+    context "with HTML format" do
+      it "toggles the quest status" do
+        expect {
+          post toggle_status_quest_path(quest)
+        }.to change { quest.reload.status }.from(false).to(true)
+      end
+
+      it "redirects to the quests list" do
+        post toggle_status_quest_path(quest)
+        expect(response).to redirect_to(quests_url)
+      end
+    end
+
+    context "with Turbo Stream format" do
+      it "toggles the quest status and returns turbo stream response" do
+        post toggle_status_quest_path(quest), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+        expect(quest.reload.status).to be true
+        expect(response.media_type).to eq "text/vnd.turbo-stream.html"
+        expect(response).to be_successful
+      end
+    end
+  end
 end
