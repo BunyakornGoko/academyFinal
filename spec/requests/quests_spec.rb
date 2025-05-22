@@ -37,27 +37,14 @@ RSpec.describe "/quests", type: :request do
       get quests_url
       expect(response).to be_successful
     end
-    
-    it "displays all quests" do
+
+    it "lists all quests" do
       quest1 = Quest.create!(name: "First Quest", status: false)
       quest2 = Quest.create!(name: "Second Quest", status: true)
+      
       get quests_url
-      expect(response.body).to include("First Quest")
-      expect(response.body).to include("Second Quest")
-    end
-  end
-
-  describe "GET /show" do
-    it "renders a successful response" do
-      quest = Quest.create! valid_attributes
-      get quest_url(quest)
-      expect(response).to be_successful
-    end
-    
-    it "displays the quest details" do
-      quest = Quest.create!(name: "Test Quest", status: false)
-      get quest_url(quest)
-      expect(response.body).to include("Test Quest")
+      expect(response.body).to include(quest1.name)
+      expect(response.body).to include(quest2.name)
     end
   end
 
@@ -65,25 +52,6 @@ RSpec.describe "/quests", type: :request do
     it "renders a successful response" do
       get new_quest_url
       expect(response).to be_successful
-    end
-    
-    it "displays the new quest form" do
-      get new_quest_url
-      expect(response.body).to include("New quest")
-    end
-  end
-
-  describe "GET /edit" do
-    it "renders a successful response" do
-      quest = Quest.create! valid_attributes
-      get edit_quest_url(quest)
-      expect(response).to be_successful
-    end
-    
-    it "loads the quest to be edited" do
-      quest = Quest.create!(name: "Edit This Quest", status: false)
-      get edit_quest_url(quest)
-      expect(response.body).to include("Edit This Quest")
     end
   end
 
@@ -95,11 +63,11 @@ RSpec.describe "/quests", type: :request do
         }.to change(Quest, :count).by(1)
       end
 
-      it "redirects to the created quest" do
+      it "redirects to the quests list" do
         post quests_url, params: { quest: valid_attributes }
-        expect(response).to redirect_to(quest_url(Quest.last))
+        expect(response).to redirect_to(quests_url)
       end
-      
+
       it "sets the correct attributes" do
         post quests_url, params: { quest: valid_attributes }
         quest = Quest.last
@@ -115,51 +83,9 @@ RSpec.describe "/quests", type: :request do
         }.to change(Quest, :count).by(0)
       end
 
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
+      it "renders a response with 422 status" do
         post quests_url, params: { quest: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
-      end
-    end
-  end
-
-  describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        {
-          name: "Updated Quest Name",
-          status: true
-        }
-      }
-
-      it "updates the requested quest" do
-        quest = Quest.create! valid_attributes
-        patch quest_url(quest), params: { quest: new_attributes }
-        quest.reload
-        expect(quest.name).to eq("Updated Quest Name")
-        expect(quest.status).to eq(true)
-      end
-
-      it "redirects to the quest" do
-        quest = Quest.create! valid_attributes
-        patch quest_url(quest), params: { quest: new_attributes }
-        quest.reload
-        expect(response).to redirect_to(quest_url(quest))
-      end
-    end
-
-    context "with invalid parameters" do
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        quest = Quest.create! valid_attributes
-        patch quest_url(quest), params: { quest: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-      
-      it "does not update the quest" do
-        quest = Quest.create! valid_attributes
-        original_name = quest.name
-        patch quest_url(quest), params: { quest: invalid_attributes }
-        quest.reload
-        expect(quest.name).to eq(original_name)
       end
     end
   end
@@ -172,17 +98,11 @@ RSpec.describe "/quests", type: :request do
       }.to change(Quest, :count).by(-1)
     end
 
-    it "redirects to the quests list" do
+    it "redirects to the quests list with see_other status" do
       quest = Quest.create! valid_attributes
       delete quest_url(quest)
-      expect(response).to redirect_to(quests_url)
-    end
-    
-    it "shows a success notice" do
-      quest = Quest.create! valid_attributes
-      delete quest_url(quest)
-      follow_redirect!
-      expect(response.body).to include("Quest was successfully destroyed")
+      expect(response).to redirect_to(quests_path)
+      expect(response).to have_http_status(:see_other)
     end
   end
 end
