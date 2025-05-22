@@ -18,11 +18,17 @@ RSpec.describe "/quests", type: :request do
   # Quest. As you add validations to Quest, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      name: "Complete Academy Project",
+      status: false
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+      name: "",
+      status: nil
+    }
   }
 
   describe "GET /index" do
@@ -30,6 +36,14 @@ RSpec.describe "/quests", type: :request do
       Quest.create! valid_attributes
       get quests_url
       expect(response).to be_successful
+    end
+    
+    it "displays all quests" do
+      quest1 = Quest.create!(name: "First Quest", status: false)
+      quest2 = Quest.create!(name: "Second Quest", status: true)
+      get quests_url
+      expect(response.body).to include("First Quest")
+      expect(response.body).to include("Second Quest")
     end
   end
 
@@ -39,12 +53,23 @@ RSpec.describe "/quests", type: :request do
       get quest_url(quest)
       expect(response).to be_successful
     end
+    
+    it "displays the quest details" do
+      quest = Quest.create!(name: "Test Quest", status: false)
+      get quest_url(quest)
+      expect(response.body).to include("Test Quest")
+    end
   end
 
   describe "GET /new" do
     it "renders a successful response" do
       get new_quest_url
       expect(response).to be_successful
+    end
+    
+    it "displays the new quest form" do
+      get new_quest_url
+      expect(response.body).to include("New quest")
     end
   end
 
@@ -53,6 +78,12 @@ RSpec.describe "/quests", type: :request do
       quest = Quest.create! valid_attributes
       get edit_quest_url(quest)
       expect(response).to be_successful
+    end
+    
+    it "loads the quest to be edited" do
+      quest = Quest.create!(name: "Edit This Quest", status: false)
+      get edit_quest_url(quest)
+      expect(response.body).to include("Edit This Quest")
     end
   end
 
@@ -67,6 +98,13 @@ RSpec.describe "/quests", type: :request do
       it "redirects to the created quest" do
         post quests_url, params: { quest: valid_attributes }
         expect(response).to redirect_to(quest_url(Quest.last))
+      end
+      
+      it "sets the correct attributes" do
+        post quests_url, params: { quest: valid_attributes }
+        quest = Quest.last
+        expect(quest.name).to eq("Complete Academy Project")
+        expect(quest.status).to eq(false)
       end
     end
 
@@ -87,14 +125,18 @@ RSpec.describe "/quests", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+          name: "Updated Quest Name",
+          status: true
+        }
       }
 
       it "updates the requested quest" do
         quest = Quest.create! valid_attributes
         patch quest_url(quest), params: { quest: new_attributes }
         quest.reload
-        skip("Add assertions for updated state")
+        expect(quest.name).to eq("Updated Quest Name")
+        expect(quest.status).to eq(true)
       end
 
       it "redirects to the quest" do
@@ -111,6 +153,14 @@ RSpec.describe "/quests", type: :request do
         patch quest_url(quest), params: { quest: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
       end
+      
+      it "does not update the quest" do
+        quest = Quest.create! valid_attributes
+        original_name = quest.name
+        patch quest_url(quest), params: { quest: invalid_attributes }
+        quest.reload
+        expect(quest.name).to eq(original_name)
+      end
     end
   end
 
@@ -126,6 +176,13 @@ RSpec.describe "/quests", type: :request do
       quest = Quest.create! valid_attributes
       delete quest_url(quest)
       expect(response).to redirect_to(quests_url)
+    end
+    
+    it "shows a success notice" do
+      quest = Quest.create! valid_attributes
+      delete quest_url(quest)
+      follow_redirect!
+      expect(response.body).to include("Quest was successfully destroyed")
     end
   end
 end
