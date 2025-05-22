@@ -1,22 +1,14 @@
 class QuestsController < ApplicationController
-  before_action :set_quest, only: %i[ show edit update destroy ]
+  before_action :set_quest, only: [:destroy, :toggle_status]
 
   # GET /quests or /quests.json
   def index
     @quests = Quest.all
   end
 
-  # GET /quests/1 or /quests/1.json
-  def show
-  end
-
   # GET /quests/new
   def new
     @quest = Quest.new
-  end
-
-  # GET /quests/1/edit
-  def edit
   end
 
   # POST /quests or /quests.json
@@ -25,23 +17,10 @@ class QuestsController < ApplicationController
 
     respond_to do |format|
       if @quest.save
-        format.html { redirect_to @quest, notice: "Quest was successfully created." }
+        format.html { redirect_to quests_url, notice: "Quest was successfully created." }
         format.json { render :show, status: :created, location: @quest }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @quest.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /quests/1 or /quests/1.json
-  def update
-    respond_to do |format|
-      if @quest.update(quest_params)
-        format.html { redirect_to @quest, notice: "Quest was successfully updated." }
-        format.json { render :show, status: :ok, location: @quest }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @quest.errors, status: :unprocessable_entity }
       end
     end
@@ -54,6 +33,20 @@ class QuestsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to quests_path, status: :see_other, notice: "Quest was successfully destroyed." }
       format.json { head :no_content }
+    end
+  end
+
+  def toggle_status
+    @quest.toggle_status!
+    respond_to do |format|
+      format.turbo_stream { 
+        render turbo_stream: turbo_stream.replace(
+          @quest,
+          partial: "quests/quest_card",
+          locals: { quest: @quest }
+        )
+      }
+      format.html { redirect_to quests_url }
     end
   end
 

@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :quests
+  resources :quests, only: [:index, :new, :create, :destroy] do
+    member do
+      post :toggle_status
+    end
+  end
+  resources :brags
   root "quests#index"
   get "brags", to: "brags#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
