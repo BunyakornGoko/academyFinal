@@ -1,7 +1,10 @@
 .PHONY: all test clean
 
-test:
-	bundle exec rspec spec/requests/quests_spec.rb
+rspec:
+	bundle exec rspec 
+
+unit:
+	bundle exec rspec spec/models spec/controllers spec/helpers spec/mailers spec/jobs spec/routing
 
 e2e:
 	bundle exec rspec spec/features/quest_management_spec.rb
