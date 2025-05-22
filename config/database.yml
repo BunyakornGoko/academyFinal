@@ -25,16 +25,14 @@ default: &default
   # database: <%= ENV["DB_NAME"] %>
   url: <%= ENV["DATABASE_URL"] %>
 
-
 development:
   <<: *default
   database: <%= ENV["DB_NAME"] %>
-
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
   # When left blank, PostgreSQL will use the default role. This is
   # the same name as the operating system user running Rails.
-  #username: academy_final
+  #username: academy_quest2
 
   # The password associated with the PostgreSQL role (username).
   #password:
@@ -94,7 +92,7 @@ production:
   cache:
     <<: *primary_production
     # database: <%= ENV["DB_NAME"] %>
-    url: <%= ENV["DATABASE_URL"] %>
+    # url: <%= ENV["DATABASE_URL"] %>
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
