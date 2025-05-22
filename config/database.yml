@@ -18,12 +18,12 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   # pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  # host: <%= ENV["DB_HOST"] %>
-  # username: <%= ENV["DB_USERNAME"] %>
-  # password: <%= ENV["DB_PASSWORD"] %>
-  # port: <%= ENV["DB_PORT"] %>
-  # database: <%= ENV["DB_NAME"] %>
-  url: <%= ENV["DATABASE_URL"] %>
+  host: <%= ENV["DB_HOST"] %>
+  username: <%= ENV["DB_USERNAME"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
+  port: <%= ENV["DB_PORT"] %>
+  database: <%= ENV["DB_NAME"] %>
+  # url: <%= ENV["DATABASE_URL"] %>
 
 development:
   <<: *default
@@ -85,22 +85,22 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    # database: <%= ENV["DB_NAME"] %>
-    # username: <%= ENV["DB_USERNAME"] %>
-    # password: <%= ENV["DB_PASSWORD"] %>
-    url: <%= ENV["DATABASE_URL"] %>
+    database: <%= ENV["DB_NAME"] %>
+    username: <%= ENV["DB_USERNAME"] %>
+    password: <%= ENV["DB_PASSWORD"] %>
+    # url: <%= ENV["DATABASE_URL"] %>
   cache:
     <<: *primary_production
-    # database: <%= ENV["DB_NAME"] %>
+    database: <%= ENV["DB_NAME"] %>
     # url: <%= ENV["DATABASE_URL"] %>
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    # database: <%= ENV["DB_NAME"] %>
-    url: <%= ENV["DATABASE_URL"] %>
+    database: <%= ENV["DB_NAME"] %>
+    # url: <%= ENV["DATABASE_URL"] %>
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    # database: <%= ENV["DB_NAME"] %>
-    url: <%= ENV["DATABASE_URL"] %>
+    database: <%= ENV["DB_NAME"] %>
+    # url: <%= ENV["DATABASE_URL"] %>
     migrations_paths: db/cable_migrate
