@@ -1,10 +1,17 @@
-<div id="<%= dom_id quest %>" class="w-full sm:w-auto my-5 space-y-5">
-  <div>
-    <strong class="block font-medium mb-1">Name:</strong>
-    <%= quest.name %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Status:</strong>
-    <%= quest.status? ? "Yes" : "No" %>
+<div id="<%= dom_id quest %>" class="w-full">
+  <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 p-6">
+    <div class="flex flex-col xs:flex-row justify-between items-start gap-3 mb-6">
+      <h2 class="text-2xl font-semibold text-gray-800 <%= quest.status? ? 'line-through' : '' %>" data-testid="quest-name"><%= quest.name %></h2>
+      <span class="px-3 py-1 rounded-full text-sm <%= quest.status? ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+        <%= quest.status? ? "Completed" : "In Progress" %>
+      </span>
+    </div>
+    
+    <div class="mt-8 border-t pt-6 border-gray-100">
+      <h3 class="text-lg font-medium text-gray-700 mb-4">Quest Status</h3>
+      <p class="text-gray-600 mb-4">
+        This quest is currently <strong><%= quest.status? ? "completed" : "in progress" %></strong>.
+      </p>
+    </div>
   </div>
 </div>
