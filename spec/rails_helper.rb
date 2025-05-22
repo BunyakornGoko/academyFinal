@@ -5,28 +5,41 @@ require_relative '../config/environment'
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 
-# Add these Capybara requires
+# Add additional test framework requires
 require 'capybara/rails'
 require 'capybara/rspec'
+require 'selenium-webdriver'
 require 'database_cleaner/active_record'
 
-# Your existing configuration...
+# Requires supporting ruby files with custom matchers and macros, etc,
+# in spec/support/ and its subdirectories.
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+
+# Checks for pending migrations and applies them before tests are run.
+begin
+  ActiveRecord::Migration.maintain_test_schema!
+rescue ActiveRecord::PendingMigrationError => e
+  puts e.to_s.strip
+  exit 1
+end
 
 RSpec.configure do |config|
-  # Your existing RSpec configuration...
-  
-  # Add Capybara configuration
+  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+  # config.fixture_path = "#{::Rails.root}/spec/fixtures"
+
+  # If you're not using ActiveRecord, or you'd prefer not to run each of your
+  # examples within a transaction, remove the following line or assign false
+  # instead of true.
+  config.use_transactional_fixtures = false
+
+  # Include Capybara for feature tests
   config.include Capybara::DSL, type: :feature
-  config.include Capybara::DSL, type: :system
+  config.include Capybara::RSpecMatchers, type: :feature
   
-  # If you're using FactoryBot
-  # config.include FactoryBot::Syntax::Methods
-  
-  # Your existing config...
+  # Include Rails route helpers
+  config.include Rails.application.routes.url_helpers
 
   # Database Cleaner configuration
-  config.use_transactional_fixtures = false
-  
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
   end
@@ -56,13 +69,17 @@ end
 Capybara.configure do |config|
   config.default_driver = :rack_test
   config.javascript_driver = :selenium_chrome_headless
-  config.default_max_wait_time = 5
-  config.server_port = 3001 # Avoid conflicts with development server
+  config.default_max_wait_time = 10
+  config.server = :puma
+  config.server_port = 3001
+  config.app_host = 'http://localhost:3001'
 end
 
-# Custom Chrome driver for JavaScript tests
+# Configure Chrome driver
 Capybara.register_driver :selenium_chrome_headless do |app|
   options = Selenium::WebDriver::Chrome::Options.new
+  
+  # Chrome configurations
   options.add_argument('--headless')
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')

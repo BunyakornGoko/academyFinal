@@ -3,6 +3,9 @@
 test:
 	bundle exec rspec spec/requests/quests_spec.rb
 
+e2e:
+	bundle exec rspec spec/features/quest_management_spec.rb
+
 help:
 	@echo "Available targets:"
 	@echo "  all         - Default target, runs test"

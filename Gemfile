@@ -69,4 +69,7 @@ group :test do
   gem "selenium-webdriver"
   gem 'webdrivers' # Automatically manages browser drivers
   gem 'database_cleaner-active_record'
+  gem 'shoulda-matchers'
+  gem 'rails-controller-testing'
+  gem 'launchy' # For save_and_open_page functionality
 end
