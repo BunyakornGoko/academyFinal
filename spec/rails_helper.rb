@@ -96,11 +96,11 @@ end
 # Configure Chrome driver for visible browser
 Capybara.register_driver :selenium_chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new
-  
+
   # Configure Chrome for visible mode
   options.add_argument('--window-size=1920,1080')
   options.add_argument('--start-maximized')
-  
+
   service = Selenium::WebDriver::Service.chrome(
     path: Webdrivers::Chromedriver.driver_path
   )
