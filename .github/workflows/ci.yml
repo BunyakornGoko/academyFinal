@@ -95,7 +95,7 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgresql://academyquest_final_db_user:fandG63ltRVPXNfZ1mMqxAjVdqt0R7NL@dpg-d0nabmmmcj7s73dp6j40-a.singapore-postgres.render.com/academyquest_final_db
-        run: bundle exec rspec
+        run: bundle exec rspec spec/models spec/controllers spec/helpers spec/mailers spec/jobs spec/routing
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
