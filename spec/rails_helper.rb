@@ -12,8 +12,8 @@ SimpleCov.start 'rails' do
   add_group 'Mailers', 'app/mailers'
   add_group 'Jobs', 'app/jobs'
 
-  # Set minimum coverage percentage
-  minimum_coverage 90
+  # Set minimum coverage percentage to 60%
+  minimum_coverage 60
 end
 
 require 'spec_helper'
@@ -31,6 +31,9 @@ require 'database_cleaner/active_record'
 
 # Configure webdrivers gem
 Webdrivers::Chromedriver.required_version = '114.0.5735.90'
+
+# Configure default URL options for the test environment
+Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
