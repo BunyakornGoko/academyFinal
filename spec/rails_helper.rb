@@ -26,7 +26,11 @@ require 'rspec/rails'
 require 'capybara/rails'
 require 'capybara/rspec'
 require 'selenium-webdriver'
+require 'webdrivers'
 require 'database_cleaner/active_record'
+
+# Configure webdrivers gem
+Webdrivers::Chromedriver.required_version = '114.0.5735.90'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -102,18 +106,22 @@ end
 # Configure Chrome driver
 Capybara.register_driver :selenium_chrome_headless do |app|
   options = Selenium::WebDriver::Chrome::Options.new
-
-  # Chrome configurations
-  # options.add_argument('--headless')
+  
+  options.add_argument('--headless=new')
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')
   options.add_argument('--disable-gpu')
   options.add_argument('--window-size=1920,1080')
-
+  
+  service = Selenium::WebDriver::Service.chrome(
+    path: Webdrivers::Chromedriver.driver_path
+  )
+  
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,
-    options: options
+    options: options,
+    service: service
   )
 end
 
