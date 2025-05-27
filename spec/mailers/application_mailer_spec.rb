@@ -12,4 +12,4 @@ RSpec.describe ApplicationMailer, type: :mailer do
   it 'uses mailer layout' do
     expect(described_class._layout).to eq('mailer')
   end
-end 
+end

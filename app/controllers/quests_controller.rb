@@ -1,5 +1,5 @@
 class QuestsController < ApplicationController
-  before_action :set_quest, only: [:destroy, :toggle_status]
+  before_action :set_quest, only: [ :destroy, :toggle_status ]
 
   # GET /quests or /quests.json
   def index
@@ -39,7 +39,7 @@ class QuestsController < ApplicationController
   def toggle_status
     @quest.toggle_status!
     respond_to do |format|
-      format.turbo_stream { 
+      format.turbo_stream {
         render turbo_stream: turbo_stream.replace(
           @quest,
           partial: "quests/quest_card",

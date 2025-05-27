@@ -13,7 +13,6 @@ require 'rails_helper'
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/quests", type: :request do
-  
   # This should return the minimal set of attributes required to create a valid
   # Quest. As you add validations to Quest, be sure to
   # adjust the attributes here as well.
@@ -41,7 +40,7 @@ RSpec.describe "/quests", type: :request do
     it "lists all quests" do
       quest1 = Quest.create!(name: "First Quest", status: false)
       quest2 = Quest.create!(name: "Second Quest", status: true)
-      
+
       get quests_url
       expect(response.body).to include(quest1.name)
       expect(response.body).to include(quest2.name)

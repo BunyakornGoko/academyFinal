@@ -16,7 +16,7 @@ FactoryBot.define do
     end
 
     # Factory for creating multiple quests
-    factory :quest_active, traits: [:active]
-    factory :quest_inactive, traits: [:inactive]
+    factory :quest_active, traits: [ :active ]
+    factory :quest_inactive, traits: [ :inactive ]
   end
 end

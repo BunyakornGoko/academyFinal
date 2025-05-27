@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :quests, only: [:index, :new, :create, :destroy] do
+  resources :quests, only: [ :index, :new, :create, :destroy ] do
     member do
       post :toggle_status
     end

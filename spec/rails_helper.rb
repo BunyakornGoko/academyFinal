@@ -4,14 +4,14 @@ SimpleCov.start 'rails' do
   add_filter '/spec/'
   add_filter '/config/'
   add_filter '/vendor/'
-  
+
   add_group 'Controllers', 'app/controllers'
   add_group 'Models', 'app/models'
   add_group 'Services', 'app/services'
   add_group 'Helpers', 'app/helpers'
   add_group 'Mailers', 'app/mailers'
   add_group 'Jobs', 'app/jobs'
-  
+
   # Set minimum coverage percentage
   minimum_coverage 90
 end
@@ -55,7 +55,7 @@ RSpec.configure do |config|
   # Include Capybara for feature tests
   config.include Capybara::DSL, type: :feature
   config.include Capybara::RSpecMatchers, type: :feature
-  
+
   # Include Rails route helpers
   config.include Rails.application.routes.url_helpers
 
@@ -98,14 +98,14 @@ end
 # Configure Chrome driver
 Capybara.register_driver :selenium_chrome_headless do |app|
   options = Selenium::WebDriver::Chrome::Options.new
-  
+
   # Chrome configurations
   # options.add_argument('--headless')
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')
   options.add_argument('--disable-gpu')
   options.add_argument('--window-size=1920,1080')
-  
+
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,

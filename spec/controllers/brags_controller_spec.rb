@@ -12,4 +12,4 @@ RSpec.describe BragsController, type: :controller do
       expect(response).to render_template(:index)
     end
   end
-end 
+end

@@ -1,6 +1,6 @@
 class Quest < ApplicationRecord
   validates :name, presence: true
-  validates :status, inclusion: { in: [true, false] }
+  validates :status, inclusion: { in: [ true, false ] }
 
   scope :active, -> { where(status: true) }
   scope :inactive, -> { where(status: false) }

@@ -35,7 +35,7 @@ RSpec.describe "quests/index", type: :view do
 
     it "renders quest cards with correct information" do
       render
-      
+
       assert_select "[data-testid='quests-list']" do
         # First quest (incomplete)
         assert_select "[data-testid='quest-card-#{@quests[0].id}']" do
