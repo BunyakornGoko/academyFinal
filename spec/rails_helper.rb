@@ -27,7 +27,7 @@ require 'capybara/rails'
 require 'capybara/rspec'
 require 'selenium-webdriver'
 require 'webdrivers'
-require 'database_cleaner/active_record'
+# require 'database_cleaner/active_record'
 
 # Configure webdrivers gem
 Webdrivers::Chromedriver.required_version = '114.0.5735.90'
@@ -67,34 +67,34 @@ RSpec.configure do |config|
   config.include Rails.application.routes.url_helpers
 
   # Database Cleaner configuration
-  config.before(:suite) do
-    DatabaseCleaner.allow_remote_database_url = true
-    DatabaseCleaner.clean_with(:truncation)
-  end
+#   config.before(:suite) do
+#     DatabaseCleaner.allow_remote_database_url = true
+#     DatabaseCleaner.clean_with(:truncation)
+#   end
 
-  config.before(:each) do
-    DatabaseCleaner.allow_remote_database_url = true
-    DatabaseCleaner.strategy = :transaction
-  end
+#   config.before(:each) do
+#     DatabaseCleaner.allow_remote_database_url = true
+#     DatabaseCleaner.strategy = :transaction
+#   end
 
-  config.before(:each, type: :feature) do
-    DatabaseCleaner.allow_remote_database_url = true
-    DatabaseCleaner.strategy = :truncation
-  end
+#   config.before(:each, type: :feature) do
+#     DatabaseCleaner.allow_remote_database_url = true
+#     DatabaseCleaner.strategy = :truncation
+#   end
 
-  config.before(:each, js: true) do
-    DatabaseCleaner.allow_remote_database_url = true
-    DatabaseCleaner.strategy = :truncation
-  end
+#   config.before(:each, js: true) do
+#     DatabaseCleaner.allow_remote_database_url = true
+#     DatabaseCleaner.strategy = :truncation
+#   end
 
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
+#   config.before(:each) do
+#     DatabaseCleaner.start
+#   end
 
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
-end
+#   config.after(:each) do
+#     DatabaseCleaner.clean
+#   end
+# end
 
 # Configure Chrome driver for visible browser
 Capybara.register_driver :selenium_chrome do |app|
